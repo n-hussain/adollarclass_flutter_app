@@ -19,12 +19,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+
+      // Start the app on the home page
+      initialRoute: '/home',
+
       routes: {
+        '/home': (context) => const HomePage(title: 'adollarclass'),
         '/services': (context) => const ServicesPage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
       },
-      home: const HomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
