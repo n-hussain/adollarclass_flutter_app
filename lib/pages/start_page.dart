@@ -11,7 +11,6 @@ class StartPage extends StatelessWidget {
       body: Column(
         children: [
 
-          // Full-width black header for logo
           Container(
             width: double.infinity,
             color: Colors.black,
@@ -28,14 +27,13 @@ class StartPage extends StatelessWidget {
 
           const SizedBox(height: 50),
 
-          // Buttons container
           Center(
             child: Column(
               children: [
 
-                // LOGIN BUTTON - clear background with black border
+                // LOGIN BUTTON
                 SizedBox(
-                  width: 220,  // reduced width
+                  width: 220,
                   height: 50,
                   child: OutlinedButton(
                     onPressed: () {
@@ -61,9 +59,9 @@ class StartPage extends StatelessWidget {
 
                 const SizedBox(height: 15),
 
-                // CONTINUE AS GUEST BUTTON - clear background with black border
+                // CONTINUE AS GUEST BUTTON (might remove in future)
                 SizedBox(
-                  width: 220,  // reduced width
+                  width: 220,
                   height: 50,
                   child: OutlinedButton(
                     onPressed: () {
