@@ -17,6 +17,19 @@ class AuthService {
     }
   }
 
+  Future<User?> register(String email, String password) async {
+    try {
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential.user;
+    } on FirebaseAuthException catch (e) {
+      print('Registration Error: ${e.message}');
+      return null;
+    }
+  }
+
   // Logout
   Future<void> logout() async {
     try {
