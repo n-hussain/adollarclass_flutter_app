@@ -6,9 +6,7 @@ class ServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Services'),
-      ),
+      appBar: AppBar(title: const Text('Services')),
       body: Center(
         child: ElevatedButton(
           onPressed: () => Navigator.pop(context), // Go back to previous page

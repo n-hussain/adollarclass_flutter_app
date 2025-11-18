@@ -6,28 +6,20 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Please login to your account',
-            ),
+            const Text('Please login to your account'),
             const SizedBox(height: 30),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Username or Email',
-              ),
+              decoration: const InputDecoration(labelText: 'Username or Email'),
             ),
             const SizedBox(height: 15),
             TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'Password',
-              ),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
             const SizedBox(height: 30),
@@ -40,7 +32,10 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 15),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/register'); // Navigate to Register page
+                Navigator.pushNamed(
+                  context,
+                  '/register',
+                ); // Navigate to Register page
               },
               child: const Text('Don\'t have an account? Register'),
             ),
