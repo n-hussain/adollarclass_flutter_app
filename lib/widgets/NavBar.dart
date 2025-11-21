@@ -48,11 +48,11 @@ class NavBar extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.person,
-                color: currentRoute == '/login' ? Colors.yellow : Colors.white,
+                color: currentRoute == '/profile' ? Colors.yellow : Colors.white,
               ),
               onPressed: () {
-                if (currentRoute != '/login') {
-                  Navigator.pushNamed(context, '/login');
+                if (currentRoute != '/profile') {
+                  Navigator.pushNamed(context, '/profile');
                 }
               },
             ),
