@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<User?> register(String email, String password, String username) async {
     try {
-      // Create user in Firebase Auth
+      // Create user in Firebase Auth only
       UserCredential credential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -15,15 +14,8 @@ class AuthService {
 
       User? user = credential.user;
 
-      // Save user info in Firestore
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user!.uid)
-          .set({
-        'username': username,
-        'email': email,
-        'createdAt': DateTime.now(),
-      });
+      // Optionally update displayName so you still have a username
+      await user?.updateDisplayName(username);
 
       return user;
 
@@ -33,10 +25,10 @@ class AuthService {
     }
   }
 
-  // Sign up or login with email & password
   Future<User?> login(String email, String password) async {
     try {
-      UserCredential credential = await _auth.signInWithEmailAndPassword(
+      UserCredential credential =
+          await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -47,8 +39,6 @@ class AuthService {
     }
   }
 
-
-  // Logout
   Future<void> logout() async {
     try {
       await _auth.signOut();
@@ -57,7 +47,6 @@ class AuthService {
     }
   }
 
-  // Delete current user
   Future<void> deleteUser() async {
     try {
       User? user = _auth.currentUser;

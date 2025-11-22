@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,6 +13,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   bool isLoading = false;
 
   @override
@@ -41,9 +43,13 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => isLoading = false);
 
     if (user != null) {
+      // Force-refresh the Firebase Auth user to ensure displayName is loaded
+      await FirebaseAuth.instance.currentUser?.reload();
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registration successful!')),
       );
+
       Navigator.pushReplacementNamed(context, '/services');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         title: null,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white, 
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Padding(
@@ -74,16 +80,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 'Create a new account',
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.black, 
+                  color: Colors.black,
                 ),
               ),
               const SizedBox(height: 30),
+
               _buildTextField(usernameController, 'Username'),
               const SizedBox(height: 15),
+
               _buildTextField(emailController, 'Email', email: true),
               const SizedBox(height: 15),
+
               _buildTextField(passwordController, 'Password', obscure: true),
               const SizedBox(height: 30),
+
               isLoading
                   ? const CircularProgressIndicator(color: mintGreen)
                   : SizedBox(
@@ -109,6 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
               const SizedBox(height: 15),
+
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/login');
@@ -134,9 +145,9 @@ class _RegisterPageState extends State<RegisterPage> {
       style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.black54), 
+        labelStyle: const TextStyle(color: Colors.black54),
         enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black26), 
+          borderSide: BorderSide(color: Colors.black26),
         ),
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF3EB489), width: 2),

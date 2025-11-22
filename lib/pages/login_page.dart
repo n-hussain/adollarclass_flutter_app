@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,16 +21,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<Map<String, dynamic>?> getUserProfile(String uid) async {
-    try {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      return doc.data();
-    } catch (e) {
-      print("Error fetching user profile: $e");
-      return null;
-    }
-  }
-
   void login() async {
     final email = emailController.text.trim();
     final password = passwordController.text;
@@ -49,8 +38,8 @@ class _LoginPageState extends State<LoginPage> {
       final user = await AuthService().login(email, password);
 
       if (user != null) {
-        final profile = await getUserProfile(user.uid);
-        final username = profile?['username'] ?? 'User';
+        // Get username from Firebase Auth instead of Firestore
+        final username = FirebaseAuth.instance.currentUser?.displayName ?? 'User';
 
         Navigator.pushReplacementNamed(
           context,
@@ -81,7 +70,6 @@ class _LoginPageState extends State<LoginPage> {
         title: null,
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
