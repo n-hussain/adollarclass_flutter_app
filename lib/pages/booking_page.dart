@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../classes.dart';
+import '../widgets/classes.dart';
 import '../widgets/navbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 

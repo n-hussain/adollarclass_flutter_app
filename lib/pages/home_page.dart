@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import '../widgets/navbar.dart';
-import '../classes.dart';
+import '../widgets/home_sections.dart'; // your data file
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -11,17 +12,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final Map<int, VideoPlayerController> _controllers = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize video controllers for sections that have a video
+    for (int i = 0; i < homeSections.length; i++) {
+      final section = homeSections[i];
+      if (section.videoPath != null) {
+        _controllers[i] = VideoPlayerController.asset(section.videoPath!)
+          ..initialize().then((_) {
+            _controllers[i]!.setLooping(true);
+            _controllers[i]!.play();
+            setState(() {});
+          });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    const darkGrey = Color(0xFF4A4A4A);
-
     return Scaffold(
       backgroundColor: Colors.white,
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-
         title: Text(
           widget.title,
           style: const TextStyle(
@@ -30,58 +56,19 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         backgroundColor: Colors.white,
         elevation: 0,
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         child: Column(
           children: [
-
-            //Loop through service items for now (static)
-            for (final service in sections)
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        service.photo,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    Text(
-                      service.title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: darkGrey,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 4),
-
-                    Text(
-                      service.description,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: darkGrey,
-                      ),
-                    ),
-                  ],
-                ),
+            for (int i = 0; i < homeSections.length; i++)
+              _buildSection(
+                title: homeSections[i].title,
+                description: homeSections[i].description,
+                imagePath: homeSections[i].imagePath,
+                videoController: _controllers[i],
               ),
           ],
         ),
@@ -89,6 +76,68 @@ class _HomePageState extends State<HomePage> {
 
       bottomNavigationBar: const NavBar(),
       extendBody: true,
+    );
+  }
+
+  Widget _buildSection({
+    required String title,
+    required String description,
+    String? imagePath,
+    VideoPlayerController? videoController,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 300,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+
+          // Background: video -> image -> fallback gray
+          Positioned.fill(
+            child: videoController != null && videoController.value.isInitialized
+                ? VideoPlayer(videoController)
+                : (imagePath != null
+                    ? Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(color: Colors.grey.shade200)),
+          ),
+
+          Container(
+            color: Colors.black.withOpacity(0.3),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                Text(
+                  description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

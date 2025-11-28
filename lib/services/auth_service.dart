@@ -5,7 +5,6 @@ class AuthService {
 
   Future<User?> register(String email, String password, String username) async {
     try {
-      // Create user in Firebase Auth only
       UserCredential credential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -14,7 +13,6 @@ class AuthService {
 
       User? user = credential.user;
 
-      // Optionally update displayName so you still have a username
       await user?.updateDisplayName(username);
 
       return user;

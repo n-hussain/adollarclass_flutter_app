@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../classes.dart';
+import '../widgets/classes.dart';
 import '../widgets/navbar.dart';
 
 class ServicesPage extends StatelessWidget {

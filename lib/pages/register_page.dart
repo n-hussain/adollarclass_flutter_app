@@ -43,7 +43,6 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => isLoading = false);
 
     if (user != null) {
-      // Force-refresh the Firebase Auth user to ensure displayName is loaded
       await FirebaseAuth.instance.currentUser?.reload();
 
       ScaffoldMessenger.of(context).showSnackBar(
